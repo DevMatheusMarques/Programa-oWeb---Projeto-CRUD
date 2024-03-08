@@ -1,14 +1,16 @@
 <?php
 
-require_once("../config.php");
+require_once("config.php");
 
-function excluirAluno($id){
+function alterarAluno($id, $nome, $curso){
     global $pdo;
-    $sql = "DELETE FROM aluno WHERE id = :id";
+    $sql = "UPDATE aluno SET nome = :nome, curso = :curso WHERE id = :id";
     $stm = $pdo->prepare($sql);
     $stm->bindParam(":id", $id);
+    $stm->bindParam(":nome", $nome);
+    $stm->bindParam(":curso", $curso);
     $stm->execute();
-    header("Location: ListarAlunos.php?excluir=ok");
+    header("Location: ListarAlunos.php?alterar=ok");
     exit();
 }
 
@@ -22,8 +24,8 @@ function consultarPorId($id){
 }
 
 if($_POST){
-    if(isset($_POST['id'])){
-        excluirAluno($_POST['id']);
+    if(isset($_POST['nome']) && isset($_POST['curso'])){
+        alterarAluno($_POST['id'], $_POST['nome'], $_POST['curso']);
     }
 } elseif (isset($_GET['id'])){
     $aluno = consultarPorId($_GET['id']);
@@ -37,29 +39,28 @@ if($_POST){
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Excluir Cadastro</title>
+    <title>Alteração de Cadastro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body class="container">
-<?php require_once("../navbar.php");?>
+<?php require_once("navbar.php");?>
 <br><br>
-<h3>Excluir Aluno</h3>
-<form action="ExcluirAluno.php" method="POST">
-    <input type="hidden" name="id" value="<?=$_GET['id']?>">
+<h3>Alterar Aluno</h3>
+<form action="AlterarAluno.php" method="POST">
+    <input type="hidden" name="id" value="<?=$aluno['id']?>">
     <div class="row">
-        <div class="col-7">
+        <div class="col-7 mt-4">
             <label for="nome" class="form-label">Informe o nome:</label>
-            <input disabled type="text" id="nome" name="nome" class="form-control" value="<?=$aluno['nome']?>" required/>
+            <input type="text" id="nome" name="nome" class="form-control" value="<?=$aluno['nome']?>" required/>
         </div>
-        <div class="col-5">
+        <div class="col-5 mt-4">
             <label for="curso" class="form-label">Informe o curso:</label>
-            <input disabled type="text" id="curso" name="curso" class="form-control" value="<?=$aluno['curso']?>" required/>
+            <input type="text" id="curso" name="curso" class="form-control" value="<?=$aluno['curso']?>" required/>
         </div>
     </div>
-    <br>
     <div class="row">
         <div class="col">
-            <button class="btn btn-danger" type="submit">Excluir Dados</button>
+            <button class="btn btn-info text-white mt-5" type="submit">Salvar Dados</button>
         </div>
     </div>
 </form>

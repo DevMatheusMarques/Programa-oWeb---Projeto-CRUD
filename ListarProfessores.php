@@ -1,6 +1,6 @@
 <?php
 
-require_once("../config.php");
+require_once("config.php");
 
 function consultarProfessores(){
     global $pdo;
@@ -20,7 +20,7 @@ function consultarProfessores(){
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<?php require_once("../navbar.php");?>
+<?php require_once("navbar.php");?>
     <div class="container">
         <br><br>
         <h3>Cadastro de Professores</h3>
